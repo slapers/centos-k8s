@@ -1,9 +1,5 @@
 ---
 
-- name: Build the ssl cn prefix
-  set_fact:
-    k8s_etcd_ssl_prefix: "/C={{k8s_ca_country}}/ST={{k8s_ca_state}}/L={{k8s_ca_location}}/O={{k8s_ca_organization}}/OU={{k8s_ca_ou}}"
-
 - name: Create the etcd certificate folders
   file:
     path="{{ k8s_ca_folder }}/{{ item }}"
@@ -22,7 +18,7 @@
       -config openssl.cnf \
       -new \
       -nodes \
-      -subj "{{ k8s_etcd_ssl_prefix }}/CN={{ item }}" \
+      -subj "/C={{k8s_ca_country}}/ST={{k8s_ca_state}}/L={{k8s_ca_location}}/O={{k8s_ca_organization}}/OU={{k8s_ca_ou}}/CN={{ item }}" \
       -keyout "etcd_private/{{ item }}.key" \
       -out "etcd_csr/{{ item }}.csr"
     chdir="{{ k8s_ca_folder }}"
