@@ -1,0 +1,59 @@
+---
+
+- slurp: src="{{ k8s_ca_folder }}/certs/ca.crt"
+  register: k8s_ca_certs_root
+  run_once: true
+  when: inventory_hostname in groups.ca
+
+- slurp: src="{{ k8s_ca_folder }}/private/{{ item }}.key"
+  register: k8s_sslkeys
+  run_once: true
+  with_items: "{{ groups['all'] }}"
+  when: inventory_hostname in groups.ca
+
+- slurp: src="{{ k8s_ca_folder }}/certs/{{ item }}.crt"
+  register: k8s_sslcerts
+  run_once: true
+  with_items: "{{ groups['all'] }}"
+  when: inventory_hostname in groups.ca
+
+- name: Write out k8s CA cert
+  copy:
+    dest: "/etc/pki/ca-trust/source/anchors/ca.{{ k8s_cluster_name }}.crt"
+    content: "{{ k8s_ca_certs_root.content | b64decode }}"
+    owner: root
+    group: root
+    mode: 0600
+  register: k8s_ca_root_written
+
+- name: Update cert index
+  command: update-ca-trust
+  when: k8s_ca_root_written.changed
+
+- name: Create ssl directory for k8s
+  file:
+    path="{{ k8s_folder }}/ssl"
+    state=directory
+    mode=0640
+    group=k8s
+    owner=root
+
+- name: Write out node ssl certificate (key)
+  copy:
+    dest: "{{ k8s_folder }}/ssl/{{ item.item }}.key"
+    content: "{{ item.content | b64decode }}"
+    owner: root
+    group: k8s
+    mode: 0640
+  when: item.item == inventory_hostname
+  with_items: "{{ k8s_sslkeys.results }}"
+
+- name:  Write out node ssl certificate (crt)
+  copy:
+    dest: "{{ k8s_folder }}/ssl/{{ item.item }}.crt"
+    content: "{{ item.content | b64decode }}"
+    owner: root
+    group: k8s
+    mode: 0640
+  when: item.item == inventory_hostname
+  with_items: "{{ k8s_sslcerts.results }}"

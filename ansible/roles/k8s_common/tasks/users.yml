@@ -1,0 +1,7 @@
+---
+
+- name: Create a group for k8s
+  group:
+    name=k8s
+    state=present
+    system=yes

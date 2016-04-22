@@ -1,0 +1,31 @@
+---
+
+- name: Create the certificate signing requests for all hosts
+  shell:
+    openssl req \
+      -config openssl.cnf \
+      -new \
+      -nodes \
+      -subj "{{ k8s_ca_subj }}/CN={{ item }}" \
+      -keyout "private/{{ item }}.key" \
+      -out "csr/{{ item }}.csr"
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/csr/{{ item }}.csr"
+  with_items: "{{ groups['all'] }}"
+
+- name: Sign the certificate signing requests for all hosts
+  shell:
+    openssl ca \
+      -config openssl.cnf \
+      -batch \
+      -extensions etcd_server \
+      -keyfile private/ca.key \
+      -cert certs/ca.crt \
+      -passin file:.ca_secret \
+      -out "certs/{{ item }}.crt" \
+      -infiles "csr/{{ item }}.csr"
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/certs/{{ item }}.crt"
+  environment:
+    SAN : "IP:127.0.0.1, IP:{{ hostvars[item]['ansible_' + k8s_cluster_iface]['ipv4']['address'] }}, DNS:{{ hostvars[item]['inventory_hostname_short'] }}, DNS:{{ hostvars[item]['inventory_hostname'] }}"
+  with_items: "{{ groups['all'] }}"
