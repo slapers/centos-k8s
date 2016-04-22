@@ -1,10 +1,37 @@
 ---
 
-- include: create_etcd_certs.yml
-  when: inventory_hostname in groups.ca
+- name: Install etcd
+  yum:
+    name=etcd
+    state=present
 
-- include: install_etcd.yml
-  when: inventory_hostname in groups.etcd
+- name: Add etcd user to k8s group
+  user:
+    name=etcd
+    groups=k8s
+    append=yes
 
-- include: setup_user_profile.yml
-  when: inventory_hostname in groups.etcd
+- name: Configure etcd
+  template:
+    src=etcd.conf.j2
+    dest=/etc/etcd/etcd.conf
+  notify: restart etcd
+
+- name: Ensure etcd is started and enabled
+  service:
+    name=etcd
+    state=started
+    enabled=true
+
+- name: Install python etcd tools
+  pip: name="{{ item }}"
+  with_items:
+    - python-etcd
+
+- name: Install profile script for easier etcd access
+  template:
+    src=etcd.sh.j2
+    dest=/etc/profile.d/etcd.sh
+    mode=775
+    owner=root
+    group=root
