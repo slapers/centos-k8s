@@ -1,5 +1,13 @@
 ---
 
+- name: prepare k8s folders
+  file:
+    path="{{ k8s_folder }}"
+    state=directory
+    owner=root
+    group=k8s
+    mode=0750
+
 - name: Install common sofware
   yum:
     name="{{item}}"

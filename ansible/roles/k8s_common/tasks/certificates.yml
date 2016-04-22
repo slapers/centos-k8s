@@ -34,7 +34,7 @@
   file:
     path="{{ k8s_folder }}/ssl"
     state=directory
-    mode=0640
+    mode=0750
     group=k8s
     owner=root
 
