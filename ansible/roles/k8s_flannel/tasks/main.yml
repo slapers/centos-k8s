@@ -1,0 +1,7 @@
+---
+
+- include: configure_etcd.yml
+  when: inventory_hostname in groups.etcd
+
+- include: install_flannel.yml
+  when: inventory_hostname in groups.node

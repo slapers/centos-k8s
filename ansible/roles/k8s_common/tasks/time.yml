@@ -1,0 +1,22 @@
+---
+
+- name: Install ntp package
+  yum: name=ntp state=present
+
+- name: Install ntp.conf template
+  template:
+    src=ntp.conf.j2
+    dest=/etc/ntp.conf
+    owner=root
+    group=root
+    mode=0644
+  notify: restart ntpd
+
+- name: Set the correct timezone
+  command: timedatectl set-timezone "{{k8s_common_tz}}"
+
+- name: Ensure ntp is started
+  service:
+    name=ntpd
+    state=started
+    enabled=yes

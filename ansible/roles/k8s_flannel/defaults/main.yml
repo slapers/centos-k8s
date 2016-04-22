@@ -1,0 +1,11 @@
+---
+k8s_flannel_etcd_prefix: /flannel
+k8s_flannel_network: 10.254.0.0/16
+k8s_flannel_subnetlen: 24
+k8s_flannel_subnetmin: 10.254.50.0
+k8s_flannel_subnetmax: 10.254.199.0
+
+# Backend type - Currently only vxlan is supported
+#
+k8s_flannel_backend_type: vxlan
+k8s_flannel_backend_vxlan_vni: 1

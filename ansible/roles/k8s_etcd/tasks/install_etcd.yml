@@ -1,0 +1,43 @@
+---
+
+- name: Install etcd
+  yum:
+    name=etcd
+    state=present
+
+- name: Configure etcd
+  template:
+    src=etcd.conf.j2
+    dest=/etc/etcd/etcd.conf
+  notify: restart etcd
+
+- name: Write out node etcd ssl certificate (key)
+  copy:
+    dest: "/etc/etcd/{{ item.item }}.key"
+    content: "{{ item.content | b64decode }}"
+    owner: root
+    group: etcd
+    mode: 0660
+  when: item.item == inventory_hostname
+  with_items: "{{ k8s_etcd_sslkeys.results }}"
+
+- name:  Write out node etcd ssl certificate (crt)
+  copy:
+    dest: "/etc/etcd/{{ item.item }}.crt"
+    content: "{{ item.content | b64decode }}"
+    owner: root
+    group: etcd
+    mode: 0660
+  when: item.item == inventory_hostname
+  with_items: "{{ k8s_etcd_sslcerts.results }}"
+
+- name: Ensure etcd is started and enabled
+  service:
+    name=etcd
+    state=started
+    enabled=true
+
+- name: Install python etcd tools
+  pip: name="{{ item }}"
+  with_items:
+    - python-etcd

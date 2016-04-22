@@ -1,0 +1,60 @@
+---
+
+- name: Build the ssl cn prefix
+  set_fact:
+    k8s_etcd_ssl_prefix: "/C={{k8s_ca_country}}/ST={{k8s_ca_state}}/L={{k8s_ca_location}}/O={{k8s_ca_organization}}/OU={{k8s_ca_ou}}"
+
+- name: Create the etcd certificate folders
+  file:
+    path="{{ k8s_ca_folder }}/{{ item }}"
+    owner=root
+    group=root
+    mode=0700
+    state=directory
+  with_items:
+    - etcd_csr
+    - etcd_certs
+    - etcd_private
+
+- name: Create the etcd certificate signing requests
+  shell:
+    openssl req \
+      -config openssl.cnf \
+      -new \
+      -nodes \
+      -subj "{{ k8s_etcd_ssl_prefix }}/CN={{ item }}" \
+      -keyout "etcd_private/{{ item }}.key" \
+      -out "etcd_csr/{{ item }}.csr"
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/etcd_csr/{{ item }}.csr"
+  with_items: "{{ groups['etcd'] }}"
+
+- name: Sign the etcd certificate signing requests
+  shell:
+    openssl ca \
+      -config openssl.cnf \
+      -batch \
+      -extensions etcd_server \
+      -keyfile private/ca.key \
+      -cert certs/ca.crt \
+      -passin file:.ca_secret \
+      -out "etcd_certs/{{ item }}.crt" \
+      -infiles "etcd_csr/{{ item }}.csr"
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/etcd_certs/{{ item }}.crt"
+  environment:
+    SAN : "IP:127.0.0.1, IP:{{ hostvars[item]['ansible_' + k8s_cluster_iface]['ipv4']['address'] }}, DNS:{{ hostvars[item]['inventory_hostname_short'] }}, DNS:{{ hostvars[item]['inventory_hostname'] }}"
+  with_items: "{{ groups['etcd'] }}"
+
+
+- name: Store the etcd certificates (key) in the inventory
+  slurp: src="{{ k8s_ca_folder }}/etcd_private/{{ item }}.key"
+  register: k8s_etcd_sslkeys
+  run_once: true
+  with_items: "{{ groups['etcd'] }}"
+
+- name: Store the etcd certificates (cert) in the inventory
+  slurp: src="{{ k8s_ca_folder }}/etcd_certs/{{ item }}.crt"
+  register: k8s_etcd_sslcerts
+  run_once: true
+  with_items: "{{ groups['etcd'] }}"

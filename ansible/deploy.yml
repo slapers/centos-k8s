@@ -1,0 +1,23 @@
+---
+- hosts: all
+  gather_facts: yes
+
+#- hosts: ca
+#  roles:
+#    - k8s_ca
+#
+#- hosts: all
+#  roles:
+#    - k8s_common
+
+- hosts:
+    - ca
+    - etcd
+  roles:
+    - k8s_etcd
+
+#- hosts:
+#    - etcd
+#    - nodes
+#  roles:
+#    - k8s_flannel

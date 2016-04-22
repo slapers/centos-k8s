@@ -1,0 +1,94 @@
+---
+
+- name: Build the ssl cn prefix
+  set_fact:
+    k8s_ca_sub: "/C={{k8s_ca_country}}/ST={{k8s_ca_state}}/L={{k8s_ca_location}}/O={{k8s_ca_organization}}/OU={{k8s_ca_ou}}"
+
+- name: Create ca root folder
+  file:
+    path="{{ k8s_ca_folder }}"
+    owner=root
+    group=root
+    mode=0700
+    state=directory
+
+- name: Create the secret file with the root ca password
+  template:
+    src=ca_secret.j2
+    dest="{{ k8s_ca_folder }}/.ca_secret"
+    owner=root
+    group=root
+    mode=0600
+
+- name: Create ca folder structure
+  file:
+    path="{{ k8s_ca_folder }}/{{ item }}"
+    owner=root
+    group=root
+    mode=0700
+    state=directory
+  with_items:
+    - certs
+    - crl
+    - newcerts
+    - private
+    - csr
+
+- name: Create ca index
+  shell:
+    touch {{ item }} && \
+      chmod 600 {{ item }} && \
+      chown root:root {{ item }}
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/{{ item }}"
+  with_items:
+    - index.txt
+    - index.txt.attr
+
+- name: Create ca/crl serial
+  shell:
+    echo 1000 > {{item}} && \
+      chmod 600 {{item}} && \
+      chown root:root {{item}}
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/{{ item }}"
+  with_items:
+    - serial
+    - crlnumber
+
+- name: Create openssl config
+  template:
+    src=openssl.cnf.j2
+    dest="{{ k8s_ca_folder }}/openssl.cnf"
+    owner=root
+    group=root
+    mode=0600
+
+- name: Create the root key
+  command:
+    openssl genrsa \
+      -aes256 \
+      -passout file:.ca_secret \
+      -out private/ca.key 4096 \
+      && chmod 400 private/ca.key
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/private/ca.key"
+
+- name: Create the root certificate
+  command:
+    openssl req \
+      -new \
+      -x509 \
+      -days 7300 \
+      -sha256 \
+      -extensions v3_ca \
+      -config openssl.cnf \
+      -key private/ca.key \
+      -out certs/ca.crt \
+      -passin file:.ca_secret \
+      -subj "{{ k8s_ca_sub }}/CN=CertificateAuthority"
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/certs/ca.crt"
+
+
+

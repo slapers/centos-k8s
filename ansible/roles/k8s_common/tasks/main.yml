@@ -1,0 +1,7 @@
+---
+
+- include: hosts.yml
+- include: software.yml
+- include: time.yml
+- include: trust_k8s_ca.yml
+- include: disable_services.yml

@@ -1,0 +1,10 @@
+---
+
+- include: create_etcd_certs.yml
+  when: inventory_hostname in groups.ca
+
+- include: install_etcd.yml
+  when: inventory_hostname in groups.etcd
+
+- include: setup_user_profile.yml
+  when: inventory_hostname in groups.etcd

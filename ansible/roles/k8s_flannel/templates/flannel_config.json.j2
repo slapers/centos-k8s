@@ -1,0 +1,10 @@
+{
+    "Network": "{{ k8s_flannel_network }}",
+    "SubnetLen": {{ k8s_flannel_subnetlen }},
+    "SubnetMin": "{{ k8s_flannel_subnetmin }}",
+    "SubnetMax": "{{ k8s_flannel_subnetmax }}",
+    "Backend": {
+        "Type": "{{ k8s_flannel_backend_type }}",
+        "VNI": {{ k8s_flannel_backend_vxlan_vni }}
+    }
+}

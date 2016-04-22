@@ -1,0 +1,19 @@
+---
+
+- slurp: src="{{ k8s_ca_folder }}/certs/ca.crt"
+  register: k8s_ca_certs_root
+  run_once: true
+  when: inventory_hostname in groups.ca
+
+- name: Write out k8s CA cert
+  copy:
+    dest: "/etc/pki/ca-trust/source/anchors/ca.{{ k8s_cluster_name }}.crt"
+    content: "{{ k8s_ca_certs_root.content | b64decode }}"
+    owner: root
+    group: root
+    mode: 0600
+  register: k8s_ca_root_written
+
+- name: Update cert index
+  command: update-ca-trust
+  when: k8s_ca_root_written.changed

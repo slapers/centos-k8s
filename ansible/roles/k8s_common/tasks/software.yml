@@ -1,0 +1,14 @@
+---
+
+- name: Install common sofware
+  yum:
+    name="{{item}}"
+    state=present
+  with_items:
+    - python-setuptools
+
+
+- name: Install pip package through easy_install
+  easy_install:
+    name=pip
+    state=present

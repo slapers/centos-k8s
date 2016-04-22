@@ -1,0 +1,38 @@
+#
+# Set this to the name of the interface that is facing to the external network
+#
+k8s_public_iface: eth0
+
+
+#
+# Set this to the interface name you want the kubernetes cluster to communicate over
+# for internal traffic, such as inter container, etcd, and k8s comms.
+#
+# k8s_public_iface and k8s_cluster_iface can be configure to the same value
+#
+k8s_cluster_iface: eth1
+
+
+#
+# Set this to the dns name of the cluster, ie: k8s.test.local
+#
+k8s_cluster_name: k8s.lapers.be
+
+
+#
+# This will be the prefix for all paths when custom stuff needs to be
+# stored such as the certificate authority files, ..
+#
+k8s_folder: /opt/k8s
+
+
+#
+# Settings for the Certificate Authority
+#
+k8s_ca_password:      myverylonganddifficultpassword
+k8s_ca_country:       BE
+k8s_ca_state:         Oost-Vlaanderen
+k8s_ca_location:      Sint-Niklaas
+k8s_ca_organization:  Stefan Lapers
+k8s_ca_ou:            Individual
+k8s_ca_folder:        "{{ k8s_folder }}/k8s_ca"

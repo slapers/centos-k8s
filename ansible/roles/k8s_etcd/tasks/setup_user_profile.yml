@@ -1,0 +1,9 @@
+---
+
+- name: Install profile script for easier etcd access
+  template:
+    src=etcd.sh.j2
+    dest=/etc/profile.d/etcd.sh
+    mode=775
+    owner=root
+    group=root

@@ -1,0 +1,4 @@
+.vagrant
+.idea
+scratchdocs/*
+*.retry
