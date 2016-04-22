@@ -4,7 +4,9 @@
     "SubnetMin": "{{ k8s_flannel_subnetmin }}",
     "SubnetMax": "{{ k8s_flannel_subnetmax }}",
     "Backend": {
-        "Type": "{{ k8s_flannel_backend_type }}",
+        {% if  k8s_flannel_backend_type == "vxlan" %}
+        "Type": "vxlan",
         "VNI": {{ k8s_flannel_backend_vxlan_vni }}
+        {% endif %}
     }
 }

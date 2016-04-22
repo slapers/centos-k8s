@@ -1,0 +1,40 @@
+---
+- name: create the flannel-config.json
+  template:
+    src=flannel-config.json.j2
+    dest="{{ k8s_folder }}/flannel-config.json"
+    owner=root
+    group=root
+    mode=600
+  run_once: true
+
+#TODO: NOT IDEMPOTENT !!!!!!!!
+- name: create the etcd config
+  shell:
+    curl -L "https://localhost:2379/v2/keys{{ k8s_flannel_etcd_prefix }}/config" \
+    -XPUT \
+    -k \
+    --data-urlencode value@/opt/k8s/flannel-config.json \
+    --cert "{{ k8s_folder }}/ssl/{{ ansible_fqdn }}.crt" \
+    --key "{{ k8s_folder }}/ssl/{{ ansible_fqdn }}.key"
+  run_once: true
+
+
+# SHOULD BE IDEMPOTENT, BUT MESSES UP ENCODING OF JSON...
+#
+#- name: slurp the flannel-config.json
+#  slurp: src="{{ k8s_folder }}/flannel-config.json"
+#  register: k8s_flannel_config_json
+#  run_once: true
+#
+#- name: create the flannel etcd config key
+#  etcd:
+#    state=present
+#    host=127.0.0.1
+#    port=2379
+#    protocol=https
+#    ssl_cert="{{ k8s_folder }}/ssl/{{ ansible_fqdn }}.crt"
+#    ssl_key="{{ k8s_folder }}/ssl/{{ ansible_fqdn }}.key"
+#    key="{{ k8s_flannel_etcd_prefix }}/config"
+#    value="{{ k8s_flannel_config_json.content | b64decode }}"
+#  run_once: true

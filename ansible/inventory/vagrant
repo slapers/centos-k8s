@@ -14,7 +14,7 @@ node2.k8s.lapers.be ansible_ssh_host=127.0.0.1 ansible_ssh_port=22224
 [masters]
 master1.k8s.lapers.be
 
-[node]
+[nodes]
 master1.k8s.lapers.be
 node1.k8s.lapers.be
 node2.k8s.lapers.be

@@ -9,15 +9,14 @@
 #- hosts: all
 #  roles:
 #    - k8s_common
-
+#
 - hosts:
-    - ca
     - etcd
   roles:
     - k8s_etcd
 
-#- hosts:
-#    - etcd
-#    - nodes
-#  roles:
-#    - k8s_flannel
+- hosts:
+    - etcd
+    - nodes
+  roles:
+    - k8s_flannel

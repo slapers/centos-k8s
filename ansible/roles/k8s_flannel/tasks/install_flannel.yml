@@ -5,4 +5,20 @@
     name=flannel
     state=present
 
+- name: Add etcd user to k8s group
+  user:
+    name=etcd
+    groups=k8s
+    append=yes
+
 - name: Configure flannel
+  template:
+    src=flanneld.j2
+    dest=/etc/sysconfig/flanneld
+  notify: restart flanneld
+
+- name: Ensure flanneld is started and enabled
+  service:
+    name=flanneld
+    state=started
+    enabled=true

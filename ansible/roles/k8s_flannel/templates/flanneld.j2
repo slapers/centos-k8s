@@ -1,0 +1,11 @@
+FLANNEL_ETCD="{%- for host in groups['etcd'] -%}
+    https://{{hostvars[host]['inventory_hostname'] }}:2379
+    {%- if not loop.last -%}
+        ,
+    {%- endif -%}
+{%- endfor -%}"
+FLANNEL_ETCD_KEY="{{ k8s_flannel_etcd_prefix }}"
+
+FLANNELD_ETCD_KEYFILE="{{ k8s_folder }}/ssl/{{ ansible_fqdn }}.key"
+FLANNELD_ETCD_CERTFILE="{{ k8s_folder }}/ssl/{{ ansible_fqdn }}.crt"
+FLANNELD_IFACE="{{ k8s_cluster_iface }}"
