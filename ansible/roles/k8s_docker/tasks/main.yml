@@ -1,0 +1,14 @@
+---
+
+- name: Install docker packages
+  yum:
+    name="{{item}}"
+    state=present
+  with_items:
+    - docker
+
+- name: Ensure docker is started and enabled
+  service:
+    name=docker
+    state=started
+    enabled=true
