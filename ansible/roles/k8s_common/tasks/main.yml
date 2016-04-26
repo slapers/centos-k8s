@@ -1,8 +1,8 @@
 ---
 
 - include: hosts.yml
+- include: users.yml
 - include: software.yml
 - include: time.yml
-- include: users.yml
 - include: certificates.yml
 - include: disable_services.yml
