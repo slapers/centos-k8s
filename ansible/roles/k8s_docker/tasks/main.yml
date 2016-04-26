@@ -1,11 +1,36 @@
 ---
 
+- name: Setup official docker repository
+  copy:
+    src=docker.repo
+    dest=/etc/yum.repos.d/docker.repo
+    owner=root
+    group=root
+    mode=0644
+
 - name: Install docker packages
   yum:
-    name="{{item}}"
+    name=docker-engine
     state=present
-  with_items:
-    - docker
+
+- name: Ensure systemd docker.service.d is present
+  file:
+    path=/etc/systemd/system/docker.service.d/
+    state=directory
+    owner=root
+    group=root
+    mode=644
+
+- name: Override systemd service
+  copy:
+    src=override.conf
+    dest=/etc/systemd/system/docker.service.d/override.conf
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - reload systemd
+    - restart docker
 
 - name: Ensure docker is started and enabled
   service:
