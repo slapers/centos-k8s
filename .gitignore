@@ -2,3 +2,5 @@
 .idea
 scratchdocs/*
 *.retry
+k8s/*
+ansible/files/k8s/*
