@@ -1,10 +1,5 @@
 ---
 
-- name: restart flanneld
-  service:
-    name=flanneld
-    state=restarted
-
 # https://github.com/ansible/ansible/issues/13485 impossible to include this centrally
 - name: reload systemd
   command: systemctl daemon-reload
