@@ -17,6 +17,25 @@
     dest=/etc/sysconfig/flanneld
   notify: restart flanneld
 
+- name: Ensure systemd flanneld.service.d is present
+  file:
+    path=/etc/systemd/system/flanneld.service.d/
+    state=directory
+    owner=root
+    group=root
+    mode=644
+
+- name: Override systemd service
+  copy:
+    src=override.conf
+    dest=/etc/systemd/system/flanneld.service.d/override.conf
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - reload systemd
+    - restart flanneld
+
 - name: Ensure flanneld is started and enabled
   service:
     name=flanneld
