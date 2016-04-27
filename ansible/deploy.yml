@@ -10,13 +10,24 @@
 #  roles:
 #    - k8s_common
 #
-- hosts:
-    - etcd
-  roles:
-    - k8s_etcd
+#- hosts:
+#    - etcd
+#  roles:
+#    - k8s_etcd
+#
+#- hosts:
+#    - etcd
+#    - nodes
+#  roles:
+#    - k8s_flannel
+#
+#- hosts:
+#    - nodes
+#  roles:
+#    - k8s_docker
 
 - hosts:
-    - etcd
+    - master
     - nodes
   roles:
-    - k8s_flannel
+    - k8s_binaries

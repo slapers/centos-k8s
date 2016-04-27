@@ -1,5 +1,15 @@
 ---
 
+
+- name: Create system k8s user
+  user:
+    name=k8s
+    comment="Kubernetes user"
+    shell=/sbin/nologin
+    state=present
+    system=yes
+    groups=k8s
+
 - name: Create a group for k8s
   group:
     name=k8s
