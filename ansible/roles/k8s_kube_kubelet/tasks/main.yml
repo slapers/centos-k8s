@@ -1,0 +1,39 @@
+---
+
+- name: Create the manifests folder
+  file:
+    path="{{ k8s_folder }}/manifests"
+    owner=root
+    group=k8s
+    mode=0770
+    state=directory
+
+- name: Create the kubelet.conf
+  template:
+    src=kubelet.conf.j2
+    dest="{{ k8s_folder }}/kubelet.conf"
+    owner=root
+    group=k8s
+    mode=0640
+  notify:
+    - reload kubelet
+
+- name: Create the kubelet.service
+  template:
+    src=kubelet.service.j2
+    dest=/usr/lib/systemd/system/kubelet.service
+    owner=root
+    group=root
+    mode=0644
+  register:
+    systemd_kubelet
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: systemd_kubelet.changed
+
+- name: Make sure kubelet is started and enabled
+  service:
+    name=kubelet
+    state=started
+    enabled=true

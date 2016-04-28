@@ -1,0 +1,17 @@
+###
+# kubernetes kubelet config
+
+KUBELET_ADDRESS="--address=127.0.0.1"
+
+KUBELET_API_SERVERS="--api-servers=https://{{ groups['master'][0] }}"
+KUBELET_CONFIG="--config={{ k8s_folder }}/manifests"
+KUBELET_CLUSTER_DOMAIN="--cluster-domain={{ k8s_cluster_name }}"
+KUBELET_TLS_CERT="--tls-cert-file={{ k8s_folder }}/ssl/{{ inventory_hostname }}-bundle.crt"
+KUBELET_TLS_KEY="--tls-private-key-file={{ k8s_folder }}/ssl/{{ inventory_hostname }}.key"
+KUBELET_KUBECONFIG="--kubeconfig={{ k8s_folder }}/kubeconfig"
+
+{% if inventory_hostname in groups['nodes'] %}
+    KUBELET_REGISTER_SCHEDULABLE="--register-schedulable=true"
+{% else %}
+    KUBELET_REGISTER_SCHEDULABLE="--register-schedulable=false"
+{% endif %}

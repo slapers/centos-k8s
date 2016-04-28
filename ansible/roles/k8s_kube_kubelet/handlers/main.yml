@@ -1,0 +1,4 @@
+---
+
+- name: reload kubelet
+  command: systemctl restart kubelet.service

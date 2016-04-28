@@ -1,0 +1,30 @@
+[Unit]
+Description=Kubernetes Kubelet Server
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+After=etcd.service
+After=docker.service
+#After=cadvisor.service
+Wants=etcd.service
+Wants=docker.service
+#Wants=cadvisor.service
+
+[Service]
+WorkingDirectory=/var/lib/kubelet
+EnvironmentFile=-{{ k8s_folder }}/config.conf
+EnvironmentFile=-{{ k8s_folder }}/kubelet.conf
+ExecStart=/usr/sbin/kubelet \
+	    $KUBE_LOGTOSTDERR \
+	    $KUBE_LOG_LEVEL \
+	    $KUBE_ALLOW_PRIV \
+        $KUBELET_ADDRESS \
+        $KUBELET_API_SERVERS \
+        $KUBELET_CONFIG \
+        $KUBELET_CLUSTER_DOMAIN \
+        $KUBELET_TLS_CERT \
+        $KUBELET_TLS_KEY \
+        $KUBELET_KUBECONFIG \
+        $KUBELET_REGISTER_SCHEDULABLE
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
