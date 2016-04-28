@@ -23,6 +23,17 @@
     mode=0755
   with_items: "{{ k8s_kube_binaries }}"
 
+- name: Check capabilities on kube-apiserver
+  command:
+    getcap "{{ k8s_kube_binaries_download_path }}/kube-apiserver"
+  register: kube_apiserver_capabilities
+
+- name: Add capabilities to open lower network ports on kube-apiserver binary
+  command:
+    setcap CAP_NET_BIND_SERVICE=+eip "{{ k8s_kube_binaries_download_path }}/kube-apiserver"
+  when: "not 'cap_net_bind_service+eip' in kube_apiserver_capabilities.stdout"
+
+
 - name: Link the binaries to a system location
   file:
     src="{{ k8s_kube_binaries_download_path }}/{{ item }}"
@@ -37,21 +48,13 @@
     src=config.conf.j2
     dest="{{ k8s_folder }}/config.conf"
     owner=root
-    group=root
-    mode=640
-
-- name: Create the config.conf file
-  template:
-    src=config.conf.j2
-    dest="{{ k8s_folder }}/config.conf"
-    owner=root
-    group=root
-    mode=640
+    group=k8s
+    mode=0640
 
 - name: Create the kubeconfig file
   template:
     src=kubeconfig.j2
     dest="{{ k8s_folder }}/kubeconfig"
     owner=root
-    group=root
-    mode=640
+    group=k8s
+    mode=0640
