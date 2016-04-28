@@ -67,3 +67,11 @@
     mode: 0640
   when: item.item == inventory_hostname
   with_items: "{{ k8s_sslcerts.results }}"
+
+- name:  Write out ca certificate
+  copy:
+    dest: "{{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"
+    content: "{{ k8s_ca_certs_root.content | b64decode }}"
+    owner: root
+    group: k8s
+    mode: 0640
