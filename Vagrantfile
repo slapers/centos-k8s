@@ -10,6 +10,7 @@ Vagrant.configure(2) do |config|
         node.vm.hostname = "master1.k8s.lapers.be"
         node.vm.network "private_network", ip: "172.16.0.10"
         node.vm.network :forwarded_port, guest: 22, host: 22222
+        node.vm.network :forwarded_port, guest: 443, host: 8443
 
         node.vm.provider "virtualbox" do |v|
             v.memory = 512
