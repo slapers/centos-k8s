@@ -1,0 +1,31 @@
+---
+
+- name: Create the apiserver.conf
+  template:
+    src=apiserver.conf.j2
+    dest="{{ k8s_folder }}/apiserver.conf"
+    owner=root
+    group=k8s
+    mode=0640
+  notify:
+    - reload kube-apiserver
+
+- name: Create the kube-apiserver.service
+  template:
+    src=kube-apiserver.service.j2
+    dest=/usr/lib/systemd/system/kube-apiserver.service
+    owner=root
+    group=root
+    mode=0644
+  register:
+    systemd_kube_api
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: systemd_kube_api.changed
+
+- name: Make sure kube-apiserver is started
+  service:
+    name=kube-apiserver
+    state=started
+    enabled=true

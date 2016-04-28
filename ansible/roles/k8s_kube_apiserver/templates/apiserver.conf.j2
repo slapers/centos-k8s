@@ -1,0 +1,36 @@
+###
+# kubernetes system config
+#
+# The following values are used to configure the kube-apiserver
+#
+
+# The address on the local server to listen to.
+KUBE_API_ADDRESS="--advertise-address={{ hostvars[inventory_hostname]['ansible_' + k8s_cluster_iface].ipv4.address }}"
+
+# The port on the local server to listen on.
+KUBE_API_PORT="--secure-port=443"
+
+# Comma separated list of nodes in the etcd cluster
+KUBE_ETCD_SERVERS="--etcd-servers={%- for host in groups['etcd'] -%}
+    https://{{ hostvars[host]['inventory_hostname'] }}:2379
+    {%- if not loop.last -%}
+        ,
+    {%- endif -%}
+{%- endfor -%}"
+KUBE_ETCD_CA="--etcd-cafile={{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"
+KUBE_ETCD_CERT="--etcd-certfile=/opt/k8s/ssl/{{ inventory_hostname }}.crt"
+KUBE_ETCD_KEY="--etcd-keyfile=/opt/k8s/ssl/{{ inventory_hostname }}.key"
+KUBE_ETCD_PREFIX="--etcd-prefix=/{{ k8s_cluster_name }}"
+
+
+# Address range to use for services
+KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range={{ k8s_service_network }}"
+
+# default admission control policies
+KUBE_ADMISSION_CONTROL="--admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota"
+
+
+KUBE_TLS_CERT="--tls-cert-file=/opt/k8s/ssl/{{ inventory_hostname }}-bundle.crt"
+KUBE_TLS_KEY="--tls-private-key-file=/opt/k8s/ssl/{{ inventory_hostname }}.key"
+KUBE_TLS_CLIENT_CA="--client-ca-file={{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"
+KUBE_SERVICE_ACCOUNT_KEY="--service-account-key-file={{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"

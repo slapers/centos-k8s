@@ -1,0 +1,31 @@
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+
+[Service]
+EnvironmentFile=-{{ k8s_folder }}/config.conf
+EnvironmentFile=-{{ k8s_folder }}/apiserver.conf
+User=k8s
+ExecStart=/usr/sbin/kube-apiserver \
+    $KUBE_LOGTOSTDERR \
+    $KUBE_LOG_LEVEL \
+    $KUBE_ALLOW_PRIV \
+    $KUBE_API_ADDRESS \
+    $KUBE_API_PORT \
+    $KUBE_ETCD_SERVERS \
+    $KUBE_ETCD_CA \
+    $KUBE_ETCD_CERT \
+    $KUBE_ETCD_KEY \
+    $KUBE_ETCD_PREFIX \
+    $KUBE_SERVICE_ADDRESSES \
+    $KUBE_ADMISSION_CONTROL \
+    $KUBE_TLS_CERT \
+    $KUBE_TLS_KEY \
+    $KUBE_TLS_CLIENT_CA \
+    $KUBE_SERVICE_ACCOUNT_KEY
+
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

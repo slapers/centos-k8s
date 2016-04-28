@@ -36,3 +36,11 @@ k8s_ca_location:      Sint-Niklaas
 k8s_ca_organization:  Stefan Lapers
 k8s_ca_ou:            Individual
 k8s_ca_folder:        "{{ k8s_folder }}/k8s_ca"
+
+
+#
+# Settings for the network
+#
+# TODO: make flannel setup customizable
+k8s_pod_network:      to-be-done
+k8s_service_network:  10.254.0.0/16
