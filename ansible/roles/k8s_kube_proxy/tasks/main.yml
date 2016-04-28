@@ -1,0 +1,31 @@
+---
+
+- name: Create the kube-proxy.conf
+  template:
+    src=kube-proxy.conf.j2
+    dest="{{ k8s_folder }}/kube-proxy.conf"
+    owner=root
+    group=k8s
+    mode=0640
+  notify:
+    - reload kube-proxy
+
+- name: Create the kube-proxy.service
+  template:
+    src=kube-proxy.service.j2
+    dest=/usr/lib/systemd/system/kube-proxy.service
+    owner=root
+    group=root
+    mode=0644
+  register:
+    systemd_kube_proxy
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: systemd_kube_proxy.changed
+
+- name: Make sure kube-proxy is started and enabled
+  service:
+    name=kube-proxy
+    state=started
+    enabled=true
