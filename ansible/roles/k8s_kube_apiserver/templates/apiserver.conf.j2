@@ -18,8 +18,8 @@ KUBE_ETCD_SERVERS="--etcd-servers={%- for host in groups['etcd'] -%}
     {%- endif -%}
 {%- endfor -%}"
 KUBE_ETCD_CA="--etcd-cafile={{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"
-KUBE_ETCD_CERT="--etcd-certfile=/opt/k8s/ssl/{{ inventory_hostname }}.crt"
-KUBE_ETCD_KEY="--etcd-keyfile=/opt/k8s/ssl/{{ inventory_hostname }}.key"
+KUBE_ETCD_CERT="--etcd-certfile={{ k8s_folder }}/ssl/{{ inventory_hostname }}.crt"
+KUBE_ETCD_KEY="--etcd-keyfile={{ k8s_folder }}/ssl/{{ inventory_hostname }}.key"
 KUBE_ETCD_PREFIX="--etcd-prefix=/{{ k8s_cluster_name }}"
 
 
@@ -30,7 +30,7 @@ KUBE_SERVICE_ADDRESSES="--service-cluster-ip-range={{ k8s_service_network }}"
 KUBE_ADMISSION_CONTROL="--admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota"
 
 
-KUBE_TLS_CERT="--tls-cert-file=/opt/k8s/ssl/{{ inventory_hostname }}-bundle.crt"
-KUBE_TLS_KEY="--tls-private-key-file=/opt/k8s/ssl/{{ inventory_hostname }}.key"
+KUBE_TLS_CERT="--tls-cert-file={{ k8s_folder }}/ssl/{{ inventory_hostname }}-bundle.crt"
+KUBE_TLS_KEY="--tls-private-key-file={{ k8s_folder }}/ssl/{{ inventory_hostname }}.key"
 KUBE_TLS_CLIENT_CA="--client-ca-file={{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"
 KUBE_SERVICE_ACCOUNT_KEY="--service-account-key-file={{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"
