@@ -24,7 +24,7 @@
   command: systemctl daemon-reload
   when: systemd_kube_api.changed
 
-- name: Make sure kube-apiserver is started
+- name: Make sure kube-apiserver is started and enabled
   service:
     name=kube-apiserver
     state=started
