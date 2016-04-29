@@ -2,32 +2,46 @@
 - hosts: all
   gather_facts: yes
 
-#- hosts: ca
-#  roles:
-#    - k8s_ca
-#
-#- hosts: all
-#  roles:
-#    - k8s_common
-#
-#- hosts:
-#    - etcd
-#  roles:
-#    - k8s_etcd
-#
-#- hosts:
-#    - etcd
-#    - nodes
-#  roles:
-#    - k8s_flannel
-#
-#- hosts:
-#    - nodes
-#  roles:
-#    - k8s_docker
+- hosts: ca
+  roles:
+    - k8s_ca
+
+- hosts: all
+  roles:
+    - k8s_common
+
+- hosts:
+    - etcd
+  roles:
+    - k8s_etcd
+
+- hosts:
+    - etcd
+    - nodes
+  roles:
+    - k8s_flannel
+
+- hosts:
+    - nodes
+  roles:
+    - k8s_docker
 
 - hosts:
     - master
     - nodes
   roles:
-    - k8s_binaries
+    - k8s_kube_binaries
+
+- hosts:
+    - master
+  roles:
+    - k8s_kube_apiserver
+    - k8s_kube_kubelet
+    - k8s_kube_controller_manager
+    - k8s_kube_scheduler
+
+- hosts:
+    - nodes
+  roles:
+    - k8s_kube_kubelet
+    - k8s_kube_proxy
