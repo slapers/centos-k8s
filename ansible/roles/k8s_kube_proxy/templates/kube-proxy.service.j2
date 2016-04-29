@@ -4,7 +4,7 @@ Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 
 [Service]
 EnvironmentFile=-{{ k8s_folder }}/config.conf
-EnvironmentFile=-{{ k8s_folder }}/kube-proxy.conf
+EnvironmentFile=-{{ k8s_folder }}/proxy.conf
 ExecStart=/usr/sbin/kube-proxy \
 	    $KUBE_LOGTOSTDERR \
 	    $KUBE_LOG_LEVEL \

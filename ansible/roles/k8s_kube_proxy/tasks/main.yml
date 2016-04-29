@@ -1,9 +1,9 @@
 ---
 
-- name: Create the kube-proxy.conf
+- name: Create the proxy.conf
   template:
-    src=kube-proxy.conf.j2
-    dest="{{ k8s_folder }}/kube-proxy.conf"
+    src=proxy.conf.j2
+    dest="{{ k8s_folder }}/proxy.conf"
     owner=root
     group=k8s
     mode=0640
