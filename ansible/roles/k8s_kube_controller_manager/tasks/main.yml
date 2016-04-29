@@ -1,0 +1,31 @@
+---
+
+- name: Create the controller-manager.conf
+  template:
+    src=controller-manager.conf.j2
+    dest="{{ k8s_folder }}/controller-manager.conf"
+    owner=root
+    group=k8s
+    mode=0640
+  notify:
+    - reload kube-controller-manager
+
+- name: Create the kube-controller-manager.service
+  template:
+    src=kube-controller-manager.service.j2
+    dest=/usr/lib/systemd/system/kube-controller-manager.service
+    owner=root
+    group=root
+    mode=0644
+  register:
+    systemd_kube_controller_manager
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: systemd_kube_controller_manager.changed
+
+- name: Make sure kube-controller-manager is started and enabled
+  service:
+    name=kube-controller-manager
+    state=started
+    enabled=true

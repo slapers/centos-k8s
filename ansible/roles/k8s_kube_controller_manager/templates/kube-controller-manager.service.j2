@@ -1,0 +1,21 @@
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+
+[Service]
+EnvironmentFile=-{{ k8s_folder }}/config.conf
+EnvironmentFile=-{{ k8s_folder }}/controller-manager.conf
+User=k8s
+ExecStart=/usr/sbin/kube-controller-manager \
+	    $KUBE_LOGTOSTDERR \
+	    $KUBE_LOG_LEVEL \
+        $CONTROLLER_MGR_ADDRESS \
+        $CONTROLLER_MGR_KUBECONFIG \
+        $CONTROLLER_MGG_CLUSTERNAME
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+
+

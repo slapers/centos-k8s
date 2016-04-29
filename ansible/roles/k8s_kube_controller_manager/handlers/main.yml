@@ -1,0 +1,4 @@
+---
+
+- name: reload kube-controller-manager
+  command: systemctl restart kube-controller-manager.service
