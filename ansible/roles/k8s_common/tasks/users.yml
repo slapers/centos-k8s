@@ -12,5 +12,7 @@
     comment="Kubernetes user"
     shell=/sbin/nologin
     state=present
+    home=/var/run/k8s
+    createhome=true
     system=yes
     groups=k8s
