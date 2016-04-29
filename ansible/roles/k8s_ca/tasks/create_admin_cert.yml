@@ -1,0 +1,27 @@
+---
+
+- name: Create the admin certificate signing request
+  shell:
+    openssl req \
+      -config openssl.cnf \
+      -new \
+      -nodes \
+      -subj "{{ k8s_ca_subj }}/CN=kube-admin" \
+      -keyout "private/kube-admin.key" \
+      -out "csr/kube-admin.csr"
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/csr/kube-admin.csr"
+
+- name: Sign the admin certificate signing request
+  shell:
+    openssl ca \
+      -config openssl.cnf \
+      -batch \
+      -extensions etcd_client \
+      -keyfile private/ca.key \
+      -cert certs/ca.crt \
+      -passin file:.ca_secret \
+      -out "certs/kube-admin.crt" \
+      -infiles "csr/kube-admin.csr"
+    chdir="{{ k8s_ca_folder }}"
+    creates="{{ k8s_ca_folder }}/certs/kube-admin.crt"
