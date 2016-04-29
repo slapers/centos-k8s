@@ -9,7 +9,6 @@ Wants=docker.service
 #Wants=cadvisor.service
 
 [Service]
-WorkingDirectory=/var/lib/kubelet
 EnvironmentFile=-{{ k8s_folder }}/config.conf
 EnvironmentFile=-{{ k8s_folder }}/kubelet.conf
 ExecStart=/usr/sbin/kubelet \
