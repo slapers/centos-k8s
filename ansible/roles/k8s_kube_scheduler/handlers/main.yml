@@ -1,0 +1,4 @@
+---
+
+- name: reload kube-scheduler
+  command: systemctl restart kube-scheduler.service

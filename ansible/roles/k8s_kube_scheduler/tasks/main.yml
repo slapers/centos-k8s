@@ -1,0 +1,31 @@
+---
+
+- name: Create the scheduler.conf
+  template:
+    src=scheduler.conf.j2
+    dest="{{ k8s_folder }}/scheduler.conf"
+    owner=root
+    group=k8s
+    mode=0640
+  notify:
+    - reload kube-scheduler
+
+- name: Create the kube-scheduler.service
+  template:
+    src=kube-scheduler.service.j2
+    dest=/usr/lib/systemd/system/kube-scheduler.service
+    owner=root
+    group=root
+    mode=0644
+  register:
+    systemd_kube_scheduler
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  when: systemd_kube_scheduler.changed
+
+- name: Make sure kube-scheduler is started and enabled
+  service:
+    name=kube-scheduler
+    state=started
+    enabled=true
