@@ -1,5 +1,10 @@
 ---
 
+- name: Create a group for k8s
+  group:
+    name=k8s
+    state=present
+    system=yes
 
 - name: Create system k8s user
   user:
@@ -9,9 +14,3 @@
     state=present
     system=yes
     groups=k8s
-
-- name: Create a group for k8s
-  group:
-    name=k8s
-    state=present
-    system=yes
