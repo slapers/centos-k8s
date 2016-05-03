@@ -27,5 +27,5 @@
     chdir="{{ k8s_ca_folder }}"
     creates="{{ k8s_ca_folder }}/certs/{{ item }}.crt"
   environment:
-    SAN : "IP:127.0.0.1, IP:{{ hostvars[item]['ansible_' + k8s_cluster_iface]['ipv4']['address'] }}, DNS:{{ hostvars[item]['inventory_hostname_short'] }}, DNS:{{ hostvars[item]['inventory_hostname'] }}"
+    SAN : "IP:127.0.0.1, IP:{{ k8s_service_network|ipaddr('net')|ipaddr(1)|ipaddr('address') }}, IP:{{ hostvars[item]['ansible_' + k8s_cluster_iface]['ipv4']['address'] }}, DNS:{{ hostvars[item]['inventory_hostname_short'] }}, DNS:{{ hostvars[item]['inventory_hostname'] }}"
   with_items: "{{ groups['all'] }}"
