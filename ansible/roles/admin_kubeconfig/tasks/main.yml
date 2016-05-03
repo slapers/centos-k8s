@@ -1,0 +1,24 @@
+---
+
+- slurp: src="{{ k8s_ca_folder }}/certs/ca.crt"
+  register: k8s_ca_certs_root
+  delegate_to: "{{ groups['ca'][0] }}"
+  run_once: true
+
+- slurp: src="{{ k8s_ca_folder }}/private/kube-admin.key"
+  register: k8s_ca_certs_kube_admin_key
+  delegate_to: "{{ groups['ca'][0] }}"
+  run_once: true
+
+- slurp: src="{{ k8s_ca_folder }}/certs/kube-admin.crt"
+  register: k8s_ca_certs_kube_admin_cert
+  delegate_to: "{{ groups['ca'][0] }}"
+  run_once: true
+
+- name: Create kubeconfig file for cluster on local machine
+  template:
+    src=kubeconfig.j2
+    dest=../kubeconfig
+    backup=yes
+  delegate_to: 127.0.0.1
+  run_once: true
