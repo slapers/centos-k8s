@@ -11,7 +11,8 @@ ExecStart=/usr/sbin/kube-controller-manager \
 	    $KUBE_LOG_LEVEL \
         $CONTROLLER_MGR_ADDRESS \
         $CONTROLLER_MGR_KUBECONFIG \
-        $CONTROLLER_MGG_CLUSTERNAME
+        $CONTROLLER_MGG_CLUSTERNAME \
+        $CONTROLLER_MGG_SVC_ACCT_PK
 Restart=on-failure
 
 [Install]
