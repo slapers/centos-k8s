@@ -15,3 +15,7 @@ KUBELET_KUBECONFIG="--kubeconfig={{ k8s_folder }}/kubeconfig"
 {% else %}
     KUBELET_REGISTER_SCHEDULABLE="--register-schedulable=false"
 {% endif %}
+
+{% if  k8s_addon_dns %}
+KUBELET_CLUSTER_DNS="--cluster_dns={{ k8s_service_network|ipaddr('net')|ipaddr(10)|ipaddr('address') }}"
+{% endif %}

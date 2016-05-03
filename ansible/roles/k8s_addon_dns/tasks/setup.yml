@@ -1,0 +1,52 @@
+---
+
+- name: Create the dns addon tmp folder
+  file:
+    path={{ k8s_addon_dns_tmpfolder }}
+    owner=root
+    group=root
+    mode=750
+    state=directory
+  run_once: true
+
+- name: Create the dns addon templates
+  template:
+    src="{{ item }}.j2"
+    dest="{{ k8s_addon_dns_tmpfolder }}/{{ item }}"
+    owner=root
+    group=root
+    mode=0640
+  with_items:
+    - kube-system-namespace.yml
+    - skydns-rc.yml
+    - skydns-svc.yml
+  run_once: true
+
+- name: Ensure kube-system namespace is available
+  kube:
+    name: kube-system
+    resource: namespace
+    filename: "{{ k8s_addon_dns_tmpfolder }}/kube-system-namespace.yml"
+    state: present
+    kubeconfig: "{{ k8s_folder }}/kubeconfig"
+  run_once: true
+
+- name: Make sure the skydns-rc is present
+  kube:
+    label: "k8s-app=kube-dns"
+    namespace: kube-system
+    resource: rc
+    filename: "{{ k8s_addon_dns_tmpfolder }}/skydns-rc.yml"
+    state: present
+    kubeconfig: "{{ k8s_folder }}/kubeconfig"
+  run_once: true
+
+- name: Make sure the skydns-svc is present
+  kube:
+    label: "k8s-app=kube-dns"
+    namespace: kube-system
+    resource: svc
+    filename: "{{ k8s_addon_dns_tmpfolder }}/skydns-svc.yml"
+    state: present
+    kubeconfig: "{{ k8s_folder }}/kubeconfig"
+  run_once: true

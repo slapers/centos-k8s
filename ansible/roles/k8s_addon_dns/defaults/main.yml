@@ -1,0 +1,8 @@
+---
+
+k8s_addon_dns: false
+
+k8s_addon_dns_ip: "{{ k8s_service_network|ipaddr('net')|ipaddr(10)|ipaddr('address') }}"
+k8s_addon_dns_replicas: 1
+k8s_addon_dns_domain: "{{ k8s_cluster_name }}"
+k8s_addon_dns_tmpfolder: "{{ k8s_folder }}/tmp"

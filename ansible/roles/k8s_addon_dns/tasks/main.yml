@@ -1,0 +1,4 @@
+---
+
+- include: setup.yml
+  when: k8s_addon_dns

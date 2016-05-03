@@ -39,6 +39,7 @@
     - k8s_kube_kubelet
     - k8s_kube_controller_manager
     - k8s_kube_scheduler
+    - k8s_addon_dns
 
 - hosts:
     - nodes
