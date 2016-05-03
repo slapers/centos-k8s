@@ -3,3 +3,4 @@
 
 PROXY_ADDRESS="--bind-address={{ hostvars[inventory_hostname]['ansible_' + k8s_cluster_iface].ipv4.address }}"
 PROXY_KUBECONFIG="--kubeconfig={{ k8s_folder }}/kubeconfig"
+PROXY_MODE="--proxy-mode=iptables"

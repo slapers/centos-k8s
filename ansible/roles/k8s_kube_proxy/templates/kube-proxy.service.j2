@@ -8,9 +8,10 @@ EnvironmentFile=-{{ k8s_folder }}/proxy.conf
 ExecStart=/usr/sbin/kube-proxy \
 	    $KUBE_LOGTOSTDERR \
 	    $KUBE_LOG_LEVEL \
-	    $KUBE_PROXY_ARGS \
+        $PROXY_MODE \
         $PROXY_ADDRESS \
-        $PROXY_KUBECONFIG
+        $PROXY_KUBECONFIG \
+	    $KUBE_PROXY_ARGS
 Restart=on-failure
 
 [Install]
