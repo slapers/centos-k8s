@@ -33,4 +33,4 @@ KUBE_ADMISSION_CONTROL="--admission-control=NamespaceLifecycle,LimitRanger,Secur
 KUBE_TLS_CERT="--tls-cert-file={{ k8s_folder }}/ssl/{{ inventory_hostname }}-bundle.crt"
 KUBE_TLS_KEY="--tls-private-key-file={{ k8s_folder }}/ssl/{{ inventory_hostname }}.key"
 KUBE_TLS_CLIENT_CA="--client-ca-file={{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"
-KUBE_SERVICE_ACCOUNT_KEY="--service-account-key-file={{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"
+KUBE_SERVICE_ACCOUNT_KEY="--service-account-key-file={{ k8s_folder }}/ssl/{{ inventory_hostname }}.key"
