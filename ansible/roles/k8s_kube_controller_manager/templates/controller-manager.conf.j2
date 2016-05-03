@@ -1,7 +1,7 @@
 ###
 # kubernetes kube-controller-manager config
 
-CONTROLLER_MGR_ADDRESS="--address=127.0.0.1"
+CONTROLLER_MGR_ADDRESS="--address={{ hostvars[inventory_hostname]['ansible_' + k8s_cluster_iface].ipv4.address }}"
 CONTROLLER_MGR_KUBECONFIG="--kubeconfig={{ k8s_folder }}/kubeconfig"
 CONTROLLER_MGG_CLUSTERNAME="--cluster-name={{ k8s_cluster_name }}"
 CONTROLLER_MGG_SVC_ACCT_PK="--service-account-private-key-file={{ k8s_folder }}/ssl/{{ inventory_hostname }}.key"

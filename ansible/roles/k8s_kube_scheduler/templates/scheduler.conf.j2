@@ -1,5 +1,5 @@
 ###
 # kubernetes kube-scheduler config
 
-SCHEDULER_ADDRESS="--address=127.0.0.1"
+SCHEDULER_ADDRESS="--address={{ hostvars[inventory_hostname]['ansible_' + k8s_cluster_iface].ipv4.address }}"
 SCHEDULER_KUBECONFIG="--kubeconfig={{ k8s_folder }}/kubeconfig"

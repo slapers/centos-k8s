@@ -1,7 +1,7 @@
 ###
 # kubernetes kubelet config
 
-KUBELET_ADDRESS="--address=127.0.0.1"
+KUBELET_ADDRESS="--address={{ hostvars[inventory_hostname]['ansible_' + k8s_cluster_iface].ipv4.address }}"
 
 KUBELET_API_SERVERS="--api-servers=https://{{ groups['master'][0] }}"
 KUBELET_CONFIG="--config={{ k8s_folder }}/manifests"
