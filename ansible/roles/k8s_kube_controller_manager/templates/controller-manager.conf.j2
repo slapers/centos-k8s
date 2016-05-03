@@ -5,3 +5,4 @@ CONTROLLER_MGR_ADDRESS="--address={{ hostvars[inventory_hostname]['ansible_' + k
 CONTROLLER_MGR_KUBECONFIG="--kubeconfig={{ k8s_folder }}/kubeconfig"
 CONTROLLER_MGG_CLUSTERNAME="--cluster-name={{ k8s_cluster_name }}"
 CONTROLLER_MGG_SVC_ACCT_PK="--service-account-private-key-file={{ k8s_folder }}/ssl/{{ inventory_hostname }}.key"
+CONTROLLER_MGG_SVC_ACCT_CA="--root-ca-file={{ k8s_folder }}/ssl/ca.{{ k8s_cluster_name }}.crt"
