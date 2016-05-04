@@ -41,7 +41,11 @@ k8s_ca_folder:        "{{ k8s_folder }}/k8s_ca"
 #
 # Settings for the network
 #
-# TODO: make flannel setup customizable
-k8s_pod_network:      to-be-done
-k8s_service_network:  10.254.0.0/16
+
+k8s_flannel_network:      10.254.0.0/16
+k8s_flannel_subnetlen:    24
+k8s_flannel_subnetmin:    10.254.50.0
+k8s_flannel_subnetmax:    10.254.199.0
+
+k8s_service_network:      10.254.0.0/16
 k8s_addon_dns: true
