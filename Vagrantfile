@@ -10,7 +10,6 @@ Vagrant.configure(2) do |config|
         node.vm.box = "centos/7"
         node.vm.hostname = "master1.k8s.lapers.be"
         node.vm.network "private_network", ip: "172.16.0.10"
-        node.vm.network :forwarded_port, guest: 22, host: 22222
         node.vm.network :forwarded_port, guest: 443, host: 8443
 
         node.vm.provider "virtualbox" do |v|
@@ -32,7 +31,6 @@ Vagrant.configure(2) do |config|
         node.vm.box = "centos/7"
         node.vm.hostname = "node1.k8s.lapers.be"
         node.vm.network "private_network", ip: "172.16.0.21"
-        node.vm.network :forwarded_port, guest: 22, host: 22223
 
         node.vm.provider "virtualbox" do |v|
             v.memory = 1536
@@ -53,7 +51,6 @@ Vagrant.configure(2) do |config|
         node.vm.box = "centos/7"
         node.vm.hostname = "node2.k8s.lapers.be"
         node.vm.network "private_network", ip: "172.16.0.22"
-        node.vm.network :forwarded_port, guest: 22, host: 22224
 
         node.vm.provider "virtualbox" do |v|
             v.memory = 1536
