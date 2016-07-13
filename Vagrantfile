@@ -24,6 +24,7 @@ Vagrant.configure(2) do |config|
         end
 
         node.vm.provision :shell, :inline => "sudo bash /home/vagrant/sync/vagrant/inject-ssh-keys.sh -k 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvg0TbM+cz3wEf4hfNm+wMUuLe9X0Z21yG0/4Ha47kN7x7lDYfsnmSD2YdSruSdcZSSKRWDkX96bXPVVL//Awi/HzzVExucRej4HlETqvOGIMeaMZwQM/80+/vMGOphGehU1FMRdwuLVbvx/eajsaYRBwUrrt4ngsCH3Tfd6kbGu+cGYkfa8mJyxWXKfke1kcnYRa0LQSznym67l+6MHfyFDhsXhsoRq6GvF4sS4MocyeaSRidhStJMWmEhGgl52owvaQMRd1sBqXgiKkLyhvVPJqBypEfvXcLi9tScCPaxN0n0lqEQPbdz9xfz6qdTi2b4rvaogCOEvdxaDf7Ok3ow== stefan@rackboost.com'"
+        node.vm.provision :shell, :inline => "sudo bash /home/vagrant/sync/vagrant/setup-disk-pool.sh -d /dev/sdb"
     end
 
     config.vm.define "node1" do |node|
@@ -44,6 +45,7 @@ Vagrant.configure(2) do |config|
         end
 
         node.vm.provision :shell, :inline => "sudo bash /home/vagrant/sync/vagrant/inject-ssh-keys.sh -k 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvg0TbM+cz3wEf4hfNm+wMUuLe9X0Z21yG0/4Ha47kN7x7lDYfsnmSD2YdSruSdcZSSKRWDkX96bXPVVL//Awi/HzzVExucRej4HlETqvOGIMeaMZwQM/80+/vMGOphGehU1FMRdwuLVbvx/eajsaYRBwUrrt4ngsCH3Tfd6kbGu+cGYkfa8mJyxWXKfke1kcnYRa0LQSznym67l+6MHfyFDhsXhsoRq6GvF4sS4MocyeaSRidhStJMWmEhGgl52owvaQMRd1sBqXgiKkLyhvVPJqBypEfvXcLi9tScCPaxN0n0lqEQPbdz9xfz6qdTi2b4rvaogCOEvdxaDf7Ok3ow== stefan@rackboost.com'"
+        node.vm.provision :shell, :inline => "sudo bash /home/vagrant/sync/vagrant/setup-disk-pool.sh -d /dev/sdb"
     end
 
     config.vm.define "node2" do |node|
@@ -64,5 +66,6 @@ Vagrant.configure(2) do |config|
         end
 
         node.vm.provision :shell, :inline => "sudo bash /home/vagrant/sync/vagrant/inject-ssh-keys.sh -k 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvg0TbM+cz3wEf4hfNm+wMUuLe9X0Z21yG0/4Ha47kN7x7lDYfsnmSD2YdSruSdcZSSKRWDkX96bXPVVL//Awi/HzzVExucRej4HlETqvOGIMeaMZwQM/80+/vMGOphGehU1FMRdwuLVbvx/eajsaYRBwUrrt4ngsCH3Tfd6kbGu+cGYkfa8mJyxWXKfke1kcnYRa0LQSznym67l+6MHfyFDhsXhsoRq6GvF4sS4MocyeaSRidhStJMWmEhGgl52owvaQMRd1sBqXgiKkLyhvVPJqBypEfvXcLi9tScCPaxN0n0lqEQPbdz9xfz6qdTi2b4rvaogCOEvdxaDf7Ok3ow== stefan@rackboost.com'"
+        node.vm.provision :shell, :inline => "sudo bash /home/vagrant/sync/vagrant/setup-disk-pool.sh -d /dev/sdb"
     end
 end
