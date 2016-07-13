@@ -35,6 +35,16 @@
 - name: Configure docker networking options
   copy:
     src=docker-network
+    dest=/etc/sysconfig/docker-network
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart docker
+
+- name: Configure docker storage options
+  copy:
+    src=docker-storage
     dest=/etc/sysconfig/docker-storage
     owner=root
     group=root
